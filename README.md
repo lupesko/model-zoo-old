@@ -25,12 +25,12 @@ This collection of models take images as input, then classifies the major object
 |<b>[VGG](models/image_classification/vgg/)</b>|[Simonyan et al.](https://arxiv.org/abs/1409.1556)|Deep CNN model (upto 19 layers) which won the ImageNet Challenge in 2014. <br>Top-5 error from  paper - ~8%|
 <hr>
 
-### Face Detection
-These models detect the presence of faces in images. Some more popular models are used for detection of celebrity faces, gender, age, and emotions.
+### Face Detection and Recognition
+These models detect and/or recognize human faces in images. Some more popular models are used for detection/recognition of celebrity faces, gender, age, and emotions.
 
 |Model Class |Reference |Description |
 |-|-|-|
-|<b>ArcFace</b>|[Deng et al.](https://arxiv.org/abs/1801.07698)|Coming soon|
+|<b>[ArcFace](models/face_recognition/ArcFace/)</b>|[Deng et al.](https://arxiv.org/abs/1801.07698)|ArcFace is a CNN based model for face recognition which learns discriminative features of faces and produces embeddings for input face images.|
 |<b>CNN Cascade</b>|[Li et al.](https://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Li_A_Convolutional_Neural_2015_CVPR_paper.pdf)|[contribute](contribute.md)|
 
 <hr>

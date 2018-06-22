@@ -94,7 +94,7 @@ The accuracy obtained by the model on the validation set is mentioned above. The
 
 
 ## Training
-We used MXNet as framework with gluon APIs to perform training. View the [training notebook](train_squeezenet.ipynb) to understand details for parameters and network for each of the above variants of ResNet.
+We used MXNet as framework with gluon APIs to perform training. View the [training notebook](train_squeezenet.ipynb) to understand details for parameters and network for each of the above variants of SqueezeNet.
 
 ## Validation
 We used MXNet as framework with gluon APIs to perform validation. Use the notebook [imagenet_validation](../imagenet_validation.ipynb) to verify the accuracy of the model on the validation set. Make sure to specify the appropriate model name in the notebook.
