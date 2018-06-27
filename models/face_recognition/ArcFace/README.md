@@ -1,12 +1,17 @@
 # ArcFace
-ArcFace is a CNN based model for face recognition which learns discriminative features of faces and produces embeddings for input face images. To enhance the discriminative power of softmax loss, a novel supervisor signal called additive angular margin (ArcFace) is used here as an additive term in the softmax loss. ArcFace can use a variety of CNN networks as its backend, each having different accuracy and performance. For each face image, the model produces a fixed length embedding vector corresponding to the face in the image. The vectors from face images of a single person have a higher similarity than that from different persons. Therefore, the model is primarily used for face recognition/verification. It can also be used in other applications like facial feature based clustering.
+
+## Description
+ArcFace is a CNN based model for face recognition which learns discriminative features of faces and produces embeddings for input face images. To enhance the discriminative power of softmax loss, a novel supervisor signal called additive angular margin (ArcFace) is used here as an additive term in the softmax loss. ArcFace can use a variety of CNN networks as its backend, each having different accuracy and performance. 
+
+## Use cases
+For each face image, the model produces a fixed length embedding vector corresponding to the face in the image. The vectors from face images of a single person have a higher similarity than that from different persons. Therefore, the model is primarily used for face recognition/verification. It can also be used in other applications like facial feature based clustering.
 
 ## Model
 The model LResNet100E-IR is an ArcFace model that uses ResNet100 as a backend with modified input and output layers.
 
-|Model        |ONNX Model  |LFW accuracy (%)|CFP-FF accuracy (%)|CFP-FP accuracy (%)|AgeDB-30 accuracy (%)|
-|-------------|:--------------|:--------------|:--------------|:--------------|:--------------|
-|LResNet100E-IR|    [248.9 MB](https://s3.amazonaws.com/onnx-model-zoo/arcface/resnet100/resnet100.onnx)     |99.77     | 99.83  |  94.21     | 97.87|
+|Model        |ONNX Model  |ONNX version| LFW accuracy (%)|CFP-FF accuracy (%)|CFP-FP accuracy (%)|AgeDB-30 accuracy (%)|
+|-------------|:--------------|:--------------|:--------------|:--------------|:--------------|:--------------|
+|LResNet100E-IR|    [248.9 MB](https://s3.amazonaws.com/onnx-model-zoo/arcface/resnet100/resnet100.onnx)|    1.2.1  |99.77     | 99.83  |  94.21     | 97.87|
 
 ## Inference
 We used MXNet as framework to perform inference. View the notebook [arcface_inference](arcface_inference.ipynb) to understand how to use above models for doing inference. A brief description of the inference process is provided below:
@@ -22,6 +27,8 @@ The model outputs an embedding vector for the input face images. The size of the
 
 ### Postprocessing
 The post-processing involves normalizing the output embedding vectors to have unit length.
+
+To do quick inference with the model, check out [Model Server](https://github.com/awslabs/mxnet-model-server/blob/master/docs/model_zoo.md/#arcface-resnet100_onnx).
 
 ## Dataset
 ### Training 
@@ -66,3 +73,6 @@ We used MXNet as framework to perform training. View the [training notebook](tra
 
 ## Keywords
 CNN, ArcFace, ONNX, Face Recognition, Computer Vision
+
+## License
+Apache 2.0
