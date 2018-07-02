@@ -1,10 +1,6 @@
 import mxnet as mx
 
 def Conv(**kwargs):
-    #name = kwargs.get('name')
-    #_weight = mx.symbol.Variable(name+'_weight')
-    #_bias = mx.symbol.Variable(name+'_bias', lr_mult=2.0, wd_mult=0.0)
-    #body = mx.sym.Convolution(weight = _weight, bias = _bias, **kwargs)
     body = mx.sym.Convolution(**kwargs)
     return body
 
@@ -56,8 +52,6 @@ def get_fc1(last_conv, num_classes, fc_type):
     if fc_type=='A':
       fc1 = flat
     else:
-      #B-D
-      #B
       fc1 = mx.sym.FullyConnected(data=flat, num_hidden=num_classes, name='pre_fc1')
       if fc_type=='C':
         fc1 = mx.sym.BatchNorm(data=fc1, fix_gamma=True, eps=2e-5, momentum=bn_mom, name='fc1')
@@ -89,7 +83,6 @@ def residual_unit_v3(data, num_filter, stride, dim_match, name, **kwargs):
     bn_mom = kwargs.get('bn_mom', 0.9)
     workspace = kwargs.get('workspace', 256)
     memonger = kwargs.get('memonger', False)
-    #print('in unit3')
     bn1 = mx.sym.BatchNorm(data=data, fix_gamma=False, eps=2e-5, momentum=bn_mom, name=name + '_bn1')
     conv1 = Conv(data=bn1, num_filter=num_filter, kernel=(3,3), stride=(1,1), pad=(1,1),
                                   no_bias=True, workspace=workspace, name=name + '_conv1')
@@ -116,7 +109,6 @@ def get_head(data, version_input, num_filter):
     kwargs = {'bn_mom': bn_mom, 'workspace' : workspace}
     data = data-127.5
     data = data*0.0078125
-    #data = mx.sym.BatchNorm(data=data, fix_gamma=True, eps=2e-5, momentum=bn_mom, name='bn_data')
     if version_input==0:
       body = Conv(data=data, num_filter=num_filter, kernel=(7, 7), stride=(2,2), pad=(3, 3),
                                 no_bias=True, name="conv0", workspace=workspace)
@@ -132,5 +124,3 @@ def get_head(data, version_input, num_filter):
       body = Act(data=body, act_type='relu', name='relu0')
       body = residual_unit_v3(body, _num_filter, (2, 2), False, name='head', **kwargs)
     return body
-
-

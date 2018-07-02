@@ -32,10 +32,6 @@ import symbol_utils
 import sklearn
 
 def Conv(**kwargs):
-    #name = kwargs.get('name')
-    #_weight = mx.symbol.Variable(name+'_weight')
-    #_bias = mx.symbol.Variable(name+'_bias', lr_mult=2.0, wd_mult=0.0)
-    #body = mx.sym.Convolution(weight = _weight, bias = _bias, **kwargs)
     body = mx.sym.Convolution(**kwargs)
     return body
 
@@ -71,7 +67,6 @@ def residual_unit_v1(data, num_filter, stride, dim_match, name, bottle_neck, **k
     workspace = kwargs.get('workspace', 256)
     memonger = kwargs.get('memonger', False)
     act_type = kwargs.get('version_act', 'prelu')
-    #print('in unit1')
     if bottle_neck:
         conv1 = Conv(data=data, num_filter=int(num_filter*0.25), kernel=(1,1), stride=stride, pad=(0,0),
                                    no_bias=True, workspace=workspace, name=name + '_conv1')
@@ -160,7 +155,6 @@ def residual_unit_v1_L(data, num_filter, stride, dim_match, name, bottle_neck, *
     workspace = kwargs.get('workspace', 256)
     memonger = kwargs.get('memonger', False)
     act_type = kwargs.get('version_act', 'prelu')
-    #print('in unit1')
     if bottle_neck:
         conv1 = Conv(data=data, num_filter=int(num_filter*0.25), kernel=(1,1), stride=(1,1), pad=(0,0),
                                    no_bias=True, workspace=workspace, name=name + '_conv1')
@@ -249,7 +243,6 @@ def residual_unit_v2(data, num_filter, stride, dim_match, name, bottle_neck, **k
     workspace = kwargs.get('workspace', 256)
     memonger = kwargs.get('memonger', False)
     act_type = kwargs.get('version_act', 'prelu')
-    #print('in unit2')
     if bottle_neck:
         # the same as https://github.com/facebook/fb.resnet.torch#notes, a bit difference with origin paper
         bn1 = mx.sym.BatchNorm(data=data, fix_gamma=False, eps=2e-5, momentum=bn_mom, name=name + '_bn1')
@@ -335,7 +328,6 @@ def residual_unit_v3(data, num_filter, stride, dim_match, name, bottle_neck, **k
     workspace = kwargs.get('workspace', 256)
     memonger = kwargs.get('memonger', False)
     act_type = kwargs.get('version_act', 'prelu')
-    #print('in unit3')
     if bottle_neck:
         bn1 = mx.sym.BatchNorm(data=data, fix_gamma=False, eps=2e-5, momentum=bn_mom, name=name + '_bn1')
         conv1 = Conv(data=bn1, num_filter=int(num_filter*0.25), kernel=(1,1), stride=(1,1), pad=(0,0),
@@ -429,7 +421,6 @@ def residual_unit_v3_x(data, num_filter, stride, dim_match, name, bottle_neck, *
     memonger = kwargs.get('memonger', False)
     act_type = kwargs.get('version_act', 'prelu')
     num_group = 32
-    #print('in unit3')
     bn1 = mx.sym.BatchNorm(data=data, fix_gamma=False, eps=2e-5, momentum=bn_mom, name=name + '_bn1')
     conv1 = Conv(data=bn1, num_group=num_group, num_filter=int(num_filter*0.5), kernel=(1,1), stride=(1,1), pad=(0,0),
                                no_bias=True, workspace=workspace, name=name + '_conv1')
@@ -517,7 +508,6 @@ def resnet(units, num_stages, filter_list, num_classes, bottle_neck, **kwargs):
     data = mx.sym.identity(data=data, name='id')
     data = data-127.5
     data = data*0.0078125
-    #data = mx.sym.BatchNorm(data=data, fix_gamma=True, eps=2e-5, momentum=bn_mom, name='bn_data')
     if version_input==0:
       body = Conv(data=data, num_filter=filter_list[0], kernel=(7, 7), stride=(2,2), pad=(3, 3),
                                 no_bias=True, name="conv0", workspace=workspace)
@@ -530,7 +520,6 @@ def resnet(units, num_stages, filter_list, num_classes, bottle_neck, **kwargs):
                                 no_bias=True, name="conv0", workspace=workspace)
       body = mx.sym.BatchNorm(data=body, fix_gamma=False, eps=2e-5, momentum=bn_mom, name='bn0')
       body = Act(data=body, act_type=act_type, name='relu0')
-      #body = mx.sym.Pooling(data=body, kernel=(3, 3), stride=(2,2), pad=(1,1), pool_type='max')
 
     for i in range(num_stages):
       if version_input==0:
@@ -589,4 +578,3 @@ def get_symbol(num_classes, num_layers, **kwargs):
                   num_classes = num_classes,
                   bottle_neck = bottle_neck,
                   **kwargs)
-

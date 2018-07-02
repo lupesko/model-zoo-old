@@ -17,7 +17,6 @@ import mxnet as mx
 from mxnet import ndarray as nd
 from mxnet import io
 from mxnet import recordio
-#sys.path.append(os.path.join(os.path.dirname(__file__), 'common'))
 import face_preprocess
 import multiprocessing
 
@@ -37,13 +36,12 @@ class FaceImageIter(io.DataIter):
             logging.info('loading recordio %s...',
                          path_imgrec)
             path_imgidx = path_imgrec[0:-4]+".idx"
-            self.imgrec = recordio.MXIndexedRecordIO(path_imgidx, path_imgrec, 'r')  # pylint: disable=redefined-variable-type
+            self.imgrec = recordio.MXIndexedRecordIO(path_imgidx, path_imgrec, 'r')
             s = self.imgrec.read_idx(0)
             header, _ = recordio.unpack(s)
             if header.flag>0:
               print('header0 label', header.label)
               self.header0 = (int(header.label[0]), int(header.label[1]))
-              #assert(header.flag==1)
               self.imgidx = range(1, int(header.label[0]))
               self.id2range = {}
               self.seq_identity = range(int(header.label[0]), int(header.label[1]))
@@ -79,7 +77,6 @@ class FaceImageIter(io.DataIter):
         print('rand_mirror', rand_mirror)
         self.cutoff = cutoff
         self.provide_label = [(label_name, (batch_size,))]
-        #print(self.provide_label[0][1])
         self.cur = 0
         self.nbatch = 0
         self.is_init = False
@@ -122,7 +119,8 @@ class FaceImageIter(io.DataIter):
                 raise StopIteration
             header, img = recordio.unpack(s)
             return header.label, img, None, None
-
+            
+    # Define functions for data augmentation - brightness, contrast, saturation, color, mirror
     def brightness_aug(self, src, x):
       alpha = 1.0 + random.uniform(-x, x)
       src *= alpha
@@ -151,9 +149,7 @@ class FaceImageIter(io.DataIter):
       augs = [self.brightness_aug, self.contrast_aug, self.saturation_aug]
       random.shuffle(augs)
       for aug in augs:
-        #print(img.shape)
         img = aug(img, x)
-        #print(img.shape)
       return img
 
     def mirror_aug(self, img):
@@ -169,7 +165,6 @@ class FaceImageIter(io.DataIter):
           self.reset()
           self.is_init = True
         """Returns the next batch of data."""
-        #print('in next', self.cur, self.labelcur)
         self.nbatch+=1
         batch_size = self.batch_size
         c, h, w = self.data_shape
@@ -198,7 +193,6 @@ class FaceImageIter(io.DataIter):
                   startw = max(0, centerw-half)
                   endw = min(_data.shape[1], centerw+half)
                   _data = _data.astype('float32')
-                  #print(starth, endh, startw, endw, _data.shape)
                   _data[starth:endh, startw:endw, :] = 127.5
                 data = [_data]
                 try:
@@ -206,12 +200,8 @@ class FaceImageIter(io.DataIter):
                 except RuntimeError as e:
                     logging.debug('Invalid image, skipping:  %s', str(e))
                     continue
-                #print('aa',data[0].shape)
-                #data = self.augmentation_transform(data)
-                #print('bb',data[0].shape)
                 for datum in data:
                     assert i < batch_size, 'Batch size must be multiples of augmenter output length'
-                    #print(datum.shape)
                     batch_data[i][:] = self.postprocess_data(datum)
                     batch_label[i][:] = label
                     i += 1
@@ -236,7 +226,7 @@ class FaceImageIter(io.DataIter):
     def imdecode(self, s):
         """Decodes a string or byte string to an NDArray.
         See mx.img.imdecode for more details."""
-        img = mx.image.imdecode(s) #mx.ndarray
+        img = mx.image.imdecode(s)
         return img
 
     def read_image(self, fname):
@@ -280,5 +270,3 @@ class FaceImageIterList(io.DataIter):
         self.cur_iter.reset()
         continue
       return ret
-
-

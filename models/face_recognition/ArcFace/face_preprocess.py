@@ -4,6 +4,9 @@ import numpy as np
 from skimage import transform as trans
 
 def parse_lst_line(line):
+  '''
+  Helper function for line parsing
+  '''
   vec = line.strip().split("\t")
   assert len(vec)>=3
   aligned = int(vec[0])
@@ -11,7 +14,6 @@ def parse_lst_line(line):
   label = int(vec[2])
   bbox = None
   landmark = None
-  #print(vec)
   if len(vec)>3:
     bbox = np.zeros( (4,), dtype=np.int32)
     for i in xrange(3,7):
@@ -22,33 +24,36 @@ def parse_lst_line(line):
       for i in xrange(7,17):
         _l.append(float(vec[i]))
       landmark = np.array(_l).reshape( (2,5) ).T
-  #print(aligned)
   return image_path, label, bbox, landmark, aligned
 
 
-
-
 def read_image(img_path, **kwargs):
+  '''
+  Read and transpose input image
+  '''
   mode = kwargs.get('mode', 'rgb')
   layout = kwargs.get('layout', 'HWC')
+  # Read image (transpose if necessary)
   if mode=='gray':
     img = cv2.imread(img_path, cv2.CV_LOAD_IMAGE_GRAYSCALE)
   else:
     img = cv2.imread(img_path, cv2.CV_LOAD_IMAGE_COLOR)
     if mode=='rgb':
-      #print('to rgb')
       img = img[...,::-1]
     if layout=='CHW':
       img = np.transpose(img, (2,0,1))
   return img
 
-
 def preprocess(img, bbox=None, landmark=None, **kwargs):
+  '''
+  Preprocess input image - returns aligned face images
+  '''
   if isinstance(img, str):
     img = read_image(img, **kwargs)
   M = None
   image_size = []
   str_image_size = kwargs.get('image_size', '')
+  # Assert input image shape
   if len(str_image_size)>0:
     image_size = [int(x) for x in str_image_size.split(',')]
     if len(image_size)==1:
@@ -56,6 +61,7 @@ def preprocess(img, bbox=None, landmark=None, **kwargs):
     assert len(image_size)==2
     assert image_size[0]==112
     assert image_size[0]==112 or image_size[1]==96
+  # Do alignment using landmnark points
   if landmark is not None:
     assert len(image_size)==2
     src = np.array([
@@ -71,8 +77,8 @@ def preprocess(img, bbox=None, landmark=None, **kwargs):
     tform = trans.SimilarityTransform()
     tform.estimate(dst, src)
     M = tform.params[0:2,:]
-    #M = cv2.estimateRigidTransform( dst.reshape(1,5,2), src.reshape(1,5,2), False)
 
+  # If no landmark points available, do alignment using bounding box. If no bounding box available use center crop
   if M is None:
     if bbox is None: #use center crop
       det = np.zeros(4, dtype=np.int32)
@@ -95,19 +101,6 @@ def preprocess(img, bbox=None, landmark=None, **kwargs):
   else: #do align using landmark
     assert len(image_size)==2
 
-    #src = src[0:3,:]
-    #dst = dst[0:3,:]
-
-
-    #print(src.shape, dst.shape)
-    #print(src)
-    #print(dst)
-    #print(M)
     warped = cv2.warpAffine(img,M,(image_size[1],image_size[0]), borderValue = 0.0)
 
-    #tform3 = trans.ProjectiveTransform()
-    #tform3.estimate(src, dst)
-    #warped = trans.warp(img, tform3, output_shape=_shape)
     return warped
-
-

@@ -4,8 +4,10 @@ import os
 import json
 import numpy as np
 
-
 def load_property(data_dir):
+  '''
+  Returns number of classes (in train dataset) and image size
+  '''
   prop = edict()
   for line in open(os.path.join(data_dir, 'property')):
     vec = line.strip().split(',')
@@ -14,8 +16,10 @@ def load_property(data_dir):
     prop.image_size = [int(vec[1]), int(vec[2])]
   return prop
 
-
-
+'''
+Functions for loading different datasets.
+get_dataset_*dataset-name*(input_dir) loads *dataset-name* dataset from input_dir
+'''
 def get_dataset_webface(input_dir):
   clean_list_file = input_dir+"_clean_list.txt"
   ret = []
@@ -119,7 +123,6 @@ def get_dataset_megaface(input_dir):
               fimage.bbox[1] = bb['y']
               fimage.bbox[2] = bb['x']+bb['width']
               fimage.bbox[3] = bb['y']+bb['height']
-              #print('bb')
             if 'landmarks' in data:
               landmarks = data['landmarks']
               if '1' in landmarks and '0' in landmarks and '2' in landmarks:
@@ -130,7 +133,6 @@ def get_dataset_megaface(input_dir):
                 fimage.landmark[1][1] = landmarks['0']['y']
                 fimage.landmark[2][0] = landmarks['2']['x']
                 fimage.landmark[2][1] = landmarks['2']['y']
-              #print('lm')
 
           ret.append(fimage)
       label+=1
@@ -165,7 +167,6 @@ def get_dataset_fgnet(input_dir):
             fimage.bbox[1] = bb['y']
             fimage.bbox[2] = bb['x']+bb['width']
             fimage.bbox[3] = bb['y']+bb['height']
-            #print('bb')
           if 'landmarks' in data:
             landmarks = data['landmarks']
             if '1' in landmarks and '0' in landmarks and '2' in landmarks:
@@ -176,9 +177,6 @@ def get_dataset_fgnet(input_dir):
               fimage.landmark[1][1] = landmarks['0']['y']
               fimage.landmark[2][0] = landmarks['2']['x']
               fimage.landmark[2][1] = landmarks['2']['y']
-            #print('lm')
-
-        #fimage.landmark = None
         ret.append(fimage)
     label+=1
   return ret
@@ -249,6 +247,7 @@ def get_dataset_common(input_dir, min_images = 1):
       label+=1
   return ret
 
+# Driver function for loading datasets, pass name of dataset to load in name argument
 def get_dataset(name, input_dir):
   if name=='webface' or name=='lfw' or name=='vgg':
     return get_dataset_common(input_dir)
@@ -265,5 +264,3 @@ def get_dataset(name, input_dir):
   if name=='clfw':
     return get_dataset_clfw(input_dir)
   return None
-
-

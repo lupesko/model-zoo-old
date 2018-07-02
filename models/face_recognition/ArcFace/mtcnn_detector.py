@@ -54,8 +54,6 @@ class MtcnnDetector(object):
             workner_net = mx.model.FeedForward.load(models[0], 1, ctx=ctx)
             self.PNets.append(workner_net)
 
-        #self.Pool = Pool(num_worker)
-
         self.RNet = mx.model.FeedForward.load(models[1], 1, ctx=ctx)
         self.ONet = mx.model.FeedForward.load(models[2], 1, ctx=ctx)
         self.LNet = mx.model.FeedForward.load(models[3], 1, ctx=ctx)
@@ -232,7 +230,6 @@ class MtcnnDetector(object):
             input_buf[i, :, :, :] = adjust_input(cv2.resize(tmp, (48, 48)))
 
         output = self.ONet.predict(input_buf)
-        #print(output[2])
 
         # filter the total_boxes with threshold
         passed = np.where(output[2][:, 1] > self.threshold[2])
@@ -652,4 +649,3 @@ class MtcnnDetector(object):
             crop_imgs.append(chips)
 
         return crop_imgs
-

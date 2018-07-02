@@ -1,17 +1,17 @@
 # ArcFace
 
-## Description
-ArcFace is a CNN based model for face recognition which learns discriminative features of faces and produces embeddings for input face images. To enhance the discriminative power of softmax loss, a novel supervisor signal called additive angular margin (ArcFace) is used here as an additive term in the softmax loss. ArcFace can use a variety of CNN networks as its backend, each having different accuracy and performance. 
-
 ## Use cases
 For each face image, the model produces a fixed length embedding vector corresponding to the face in the image. The vectors from face images of a single person have a higher similarity than that from different persons. Therefore, the model is primarily used for face recognition/verification. It can also be used in other applications like facial feature based clustering.
+
+## Description
+ArcFace is a CNN based model for face recognition which learns discriminative features of faces and produces embeddings for input face images. To enhance the discriminative power of softmax loss, a novel supervisor signal called additive angular margin (ArcFace) is used here as an additive term in the softmax loss. ArcFace can use a variety of CNN networks as its backend, each having different accuracy and performance. 
 
 ## Model
 The model LResNet100E-IR is an ArcFace model that uses ResNet100 as a backend with modified input and output layers.
 
-|Model        |ONNX Model  |ONNX version| LFW accuracy (%)|CFP-FF accuracy (%)|CFP-FP accuracy (%)|AgeDB-30 accuracy (%)|
-|-------------|:--------------|:--------------|:--------------|:--------------|:--------------|:--------------|
-|LResNet100E-IR|    [248.9 MB](https://s3.amazonaws.com/onnx-model-zoo/arcface/resnet100/resnet100.onnx)|    1.2.1  |99.77     | 99.83  |  94.21     | 97.87|
+|Model        |Download  | Download (with sample test data)|ONNX version| LFW accuracy (%)|CFP-FF accuracy (%)|CFP-FP accuracy (%)|AgeDB-30 accuracy (%)|
+|-------------|:--------------|:--------------|:--------------|:--------------|:--------------|:--------------|:--------------|
+|LResNet100E-IR|    [248.9 MB](https://s3.amazonaws.com/onnx-model-zoo/arcface/resnet100/resnet100.onnx)|   | 1.2.1  |99.77     | 99.83  |  94.21     | 97.87|
 
 ## Inference
 We used MXNet as framework to perform inference. View the notebook [arcface_inference](arcface_inference.ipynb) to understand how to use above models for doing inference. A brief description of the inference process is provided below:
@@ -20,13 +20,13 @@ We used MXNet as framework to perform inference. View the notebook [arcface_infe
 The input to the model should preferably be images containing a single face in each image. There are no constraints on the size of the image. The example displayed in the inference notebook was done using jpeg images.
 
 ### Preprocessing
-In order to input only face pixels into the network, all input images are passed through a pretrained face detection and alignment model, [MTCNN detector](https://kpzhang93.github.io/MTCNN_face_detection_alignment/index.html). The output of this model are landmark points and a bounding box corresponding to the face in the image. Using this output, the image is processed using affine transforms to generate the aligned face images which are input to the network.
+In order to input only face pixels into the network, all input images are passed through a pretrained face detection and alignment model, [MTCNN detector](https://kpzhang93.github.io/MTCNN_face_detection_alignment/index.html). The output of this model are landmark points and a bounding box corresponding to the face in the image. Using this output, the image is processed using affine transforms to generate the aligned face images which are input to the network. Check [arcface_preprocess.py](arcface_preprocess.py) for code.
 
 ### Output
 The model outputs an embedding vector for the input face images. The size of the vector is tunable (512 for LResNet100E-IR).
 
 ### Postprocessing
-The post-processing involves normalizing the output embedding vectors to have unit length.
+The post-processing involves normalizing the output embedding vectors to have unit length. Check [arcface_postprocess.py](arcface_postprocess.py) for code.
 
 To do quick inference with the model, check out [Model Server](https://github.com/awslabs/mxnet-model-server/blob/master/docs/model_zoo.md/#arcface-resnet100_onnx).
 
@@ -46,6 +46,12 @@ The following three datasets are used for validation:
 1. Download the file  `faces_ms1m_112x112.zip` : [8.1 GB](https://s3.amazonaws.com/onnx-model-zoo/arcface/dataset/faces_ms1m_112x112.zip)
 2. Unzip `faces_ms1m_112x112.zip` to produce a folder of the same name. Use path to this folder in the notebooks. This folder contains the training as well as the validation datasets.
 
+## Validation accuracy
+The accuracies obtained by the models on the validation set are mentioned above. Maximum deviation of 0.2%(CFP-FP) in accuracy is observed compared to that in the paper.
+
+## Training
+We used MXNet as framework to perform training. View the [training notebook](train_arcface.ipynb) to understand details for parameters and network for each of the above variants of ArcFace.
+
 ## Validation
 The validation techniques for the three validation sets are described below:
 * **LFW** : Face verification accuracy on 6000 face pairs.
@@ -54,12 +60,7 @@ The validation techniques for the three validation sets are described below:
 
 * **AgeDB** : Validation is only performed on AgeDB-30 as mentioned above, with a metric same as LFW.
 
-The accuracy obtained by the model on the validation set is mentioned above and is within 1-2% of the original paper.
-
 We used MXNet as framework to perform validation. Use the notebook [arcface_validation](arcface_validation.ipynb) to verify the accuracy of the model on the validation set. Make sure to specify the appropriate model name in the notebook.
-
-## Training
-We used MXNet as framework to perform training. View the [training notebook](train_arcface.ipynb) to understand details for parameters and network for each of the above variants of ArcFace.
 
 ## References
 * All models are from the paper [ArcFace: Additive Angular Margin Loss for Deep Face Recognition](https://arxiv.org/abs/1801.07698).
