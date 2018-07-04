@@ -20,13 +20,13 @@ We used MXNet as framework to perform inference. View the notebook [arcface_infe
 The input to the model should preferably be images containing a single face in each image. There are no constraints on the size of the image. The example displayed in the inference notebook was done using jpeg images.
 
 ### Preprocessing
-In order to input only face pixels into the network, all input images are passed through a pretrained face detection and alignment model, [MTCNN detector](https://kpzhang93.github.io/MTCNN_face_detection_alignment/index.html). The output of this model are landmark points and a bounding box corresponding to the face in the image. Using this output, the image is processed using affine transforms to generate the aligned face images which are input to the network. Check [arcface_preprocess.py](arcface_preprocess.py) for code.
+In order to input only face pixels into the network, all input images are passed through a pretrained face detection and alignment model, [MTCNN detector](https://kpzhang93.github.io/MTCNN_face_detection_alignment/index.html). The output of this model are landmark points and a bounding box corresponding to the face in the image. Using this output, the image is processed using affine transforms to generate the aligned face images which are input to the network. Check [face_preprocess.py](face_preprocess.py) and [inference notebook](arcface_inference.ipynb) for code.
 
 ### Output
 The model outputs an embedding vector for the input face images. The size of the vector is tunable (512 for LResNet100E-IR).
 
 ### Postprocessing
-The post-processing involves normalizing the output embedding vectors to have unit length. Check [arcface_postprocess.py](arcface_postprocess.py) for code.
+The post-processing involves normalizing the output embedding vectors to have unit length. Check [face_postprocess.py](face_postprocess.py) for code.
 
 To do quick inference with the model, check out [Model Server](https://github.com/awslabs/mxnet-model-server/blob/master/docs/model_zoo.md/#arcface-resnet100_onnx).
 
