@@ -11,7 +11,7 @@ The model LResNet100E-IR is an ArcFace model that uses ResNet100 as a backend wi
 
 |Model        |Download  | Download (with sample test data)|ONNX version| LFW accuracy (%)|CFP-FF accuracy (%)|CFP-FP accuracy (%)|AgeDB-30 accuracy (%)|
 |-------------|:--------------|:--------------|:--------------|:--------------|:--------------|:--------------|:--------------|
-|LResNet100E-IR|    [248.9 MB](https://s3.amazonaws.com/onnx-model-zoo/arcface/resnet100/resnet100.onnx)|   | 1.2.1  |99.77     | 99.83  |  94.21     | 97.87|
+|LResNet100E-IR|    [248.9 MB](https://s3.amazonaws.com/onnx-model-zoo/arcface/resnet100/resnet100.onnx)|  [226.6 MB](https://s3.amazonaws.com/onnx-model-zoo/arcface/resnet100/resnet100.tar.gz) | 1.2.1  |99.77     | 99.83  |  94.21     | 97.87|
 
 ## Inference
 We used MXNet as framework to perform inference. View the notebook [arcface_inference](arcface_inference.ipynb) to understand how to use above models for doing inference. A brief description of the inference process is provided below:
