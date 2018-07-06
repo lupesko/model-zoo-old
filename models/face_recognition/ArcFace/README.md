@@ -67,12 +67,10 @@ We used MXNet as framework to perform validation. Use the notebook [arcface_vali
 ## References
 * All models are from the paper [ArcFace: Additive Angular Margin Loss for Deep Face Recognition](https://arxiv.org/abs/1801.07698).
 * Original training dataset from the paper [MS-Celeb-1M: A Dataset and Benchmark for Large-Scale Face Recognition](https://arxiv.org/abs/1607.08221).
+* [InsightFace repo](https://github.com/deepinsight/insightface), [MXNet](http://mxnet.incubator.apache.org)
 
 ## Contributors
 [abhinavs95](https://github.com/abhinavs95) (Amazon AI)
-
-## Acknowledgments
-[InsightFace repo](https://github.com/deepinsight/insightface), [MXNet](http://mxnet.incubator.apache.org)
 
 ## License
 Apache 2.0
