@@ -9,9 +9,11 @@ ArcFace is a CNN based model for face recognition which learns discriminative fe
 ## Model
 The model LResNet100E-IR is an ArcFace model that uses ResNet100 as a backend with modified input and output layers.
 
-|Model        |Download  | Download (with sample test data)|ONNX version| LFW accuracy (%)|CFP-FF accuracy (%)|CFP-FP accuracy (%)|AgeDB-30 accuracy (%)|
+|Model        |Download  | Download (with sample test data)|ONNX version| LFW * accuracy (%)|CFP-FF * accuracy (%)|CFP-FP * accuracy (%)|AgeDB-30 * accuracy (%)|
 |-------------|:--------------|:--------------|:--------------|:--------------|:--------------|:--------------|:--------------|
 |LResNet100E-IR|    [248.9 MB](https://s3.amazonaws.com/onnx-model-zoo/arcface/resnet100/resnet100.onnx)|  [226.6 MB](https://s3.amazonaws.com/onnx-model-zoo/arcface/resnet100/resnet100.tar.gz) | 1.2.1  |99.77     | 99.83  |  94.21     | 97.87|
+
+\* each of the accuracy metrics correspond to accuracies on different [validation sets](#Validation-sets) each with their own [validation methods](#Validation).
 
 ## Inference
 We used MXNet as framework to perform inference. View the notebook [arcface_inference](arcface_inference.ipynb) to understand how to use above models for doing inference. A brief description of the inference process is provided below:
@@ -31,10 +33,10 @@ The post-processing involves normalizing the output embedding vectors to have un
 To do quick inference with the model, check out [Model Server](https://github.com/awslabs/mxnet-model-server/blob/master/docs/model_zoo.md/#arcface-resnet100_onnx).
 
 ## Dataset
-### Training 
+### Training set
 **Refined MS-Celeb-1M** is a refined version of the [MS-Celeb-1M dataset](https://arxiv.org/abs/1607.08221). The refined version contains 3.8 million images from 85000 unique identities.
 
-### Validation
+### Validation sets
 The following three datasets are used for validation:
 * **Labelled Faces in the Wild (LFW)** contains 13233 web-collected images from 5749 identities with large variations in pose, exposure and illuminations.
 
@@ -71,9 +73,6 @@ We used MXNet as framework to perform validation. Use the notebook [arcface_vali
 
 ## Acknowledgments
 [InsightFace repo](https://github.com/deepinsight/insightface), [MXNet](http://mxnet.incubator.apache.org)
-
-## Keywords
-CNN, ArcFace, ONNX, Face Recognition, Computer Vision
 
 ## License
 Apache 2.0
