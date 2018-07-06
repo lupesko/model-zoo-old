@@ -13,7 +13,7 @@ The model LResNet100E-IR is an ArcFace model that uses ResNet100 as a backend wi
 |-------------|:--------------|:--------------|:--------------|:--------------|:--------------|:--------------|:--------------|
 |LResNet100E-IR|    [248.9 MB](https://s3.amazonaws.com/onnx-model-zoo/arcface/resnet100/resnet100.onnx)|  [226.6 MB](https://s3.amazonaws.com/onnx-model-zoo/arcface/resnet100/resnet100.tar.gz) | 1.2.1  |99.77     | 99.83  |  94.21     | 97.87|
 
-\* each of the accuracy metrics correspond to accuracies on different [validation sets](#Validation-sets) each with their own [validation methods](#Validation).
+\* each of the accuracy metrics correspond to accuracies on different [validation sets](#val_data) each with their own [validation methods](#val_method).
 
 ## Inference
 We used MXNet as framework to perform inference. View the notebook [arcface_inference](arcface_inference.ipynb) to understand how to use above models for doing inference. A brief description of the inference process is provided below:
@@ -33,10 +33,10 @@ The post-processing involves normalizing the output embedding vectors to have un
 To do quick inference with the model, check out [Model Server](https://github.com/awslabs/mxnet-model-server/blob/master/docs/model_zoo.md/#arcface-resnet100_onnx).
 
 ## Dataset
-### Training set
+### Training
 **Refined MS-Celeb-1M** is a refined version of the [MS-Celeb-1M dataset](https://arxiv.org/abs/1607.08221). The refined version contains 3.8 million images from 85000 unique identities.
 
-### Validation sets
+### <a name="val_data"></a>Validation
 The following three datasets are used for validation:
 * **Labelled Faces in the Wild (LFW)** contains 13233 web-collected images from 5749 identities with large variations in pose, exposure and illuminations.
 
@@ -54,7 +54,7 @@ The accuracies obtained by the models on the validation set are mentioned above.
 ## Training
 We used MXNet as framework to perform training. View the [training notebook](train_arcface.ipynb) to understand details for parameters and network for each of the above variants of ArcFace.
 
-## Validation
+## <a name="val_method"></a>Validation
 The validation techniques for the three validation sets are described below:
 * **LFW** : Face verification accuracy on 6000 face pairs.
 
