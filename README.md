@@ -1,3 +1,5 @@
+NOTICE: THIS REPO IS DEPRECATED! model-zoo has been merge into [onnx/models](https://github.com/onnx/models). 
+=======
 # Open Neural Network eXchange (ONNX) Model Zoo
 
 [![Generic badge](https://img.shields.io/badge/Status-Work_In_Progress-red.svg)](#) 
